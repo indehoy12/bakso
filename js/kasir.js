@@ -207,6 +207,6 @@ function logout() {
   document.getElementById("loadingScreen").style.display = "flex";
 
   setTimeout(() => {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   }, 2500);
 }
