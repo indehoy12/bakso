@@ -230,15 +230,17 @@ table tr:hover {
 
 .laporan-table {
   width: 100%;
-  margin-top: 20px;
   border-collapse: collapse;
+  overflow-x: auto;
+  display: block;
 }
 
 .laporan-table th,
 .laporan-table td {
-  padding: 12px;
-  border: 1px solid #ddd;
+  padding: 8px;
   text-align: left;
+  border-bottom: 1px solid #ccc;
+  white-space: nowrap;
 }
 
 .laporan-table th {
@@ -329,6 +331,18 @@ table tr:hover {
 @media (max-width: 768px) {
   .container {
     padding: 15px;
+  }
+  #laporanHarian table {
+    width: 100%;
+    font-size: 14px;
+    overflow-x: auto;
+    display: block;
+  }
+
+  #laporanHarian td,
+  #laporanHarian th {
+    padding: 8px;
+    word-wrap: break-word;
   }
 
   h1 {
