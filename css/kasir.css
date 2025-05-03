@@ -11,6 +11,7 @@ body {
   align-items: center;
   color: #2d6a4f;
   padding-left: 25px;
+  padding-bottom: 15px;
 }
 
 .logo {
@@ -54,12 +55,7 @@ label {
   color: #355e3b;
 }
 
-input[type="number"] {
-  width: auto;
-  max-width: 100%;
-  padding: 12px 10px;
-}
-
+input[type="number"],
 select,
 input,
 button {
@@ -71,6 +67,10 @@ button {
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.3s ease;
+}
+
+input[type="number"] {
+  width: 50%;
 }
 
 select:focus,
@@ -110,23 +110,68 @@ button:active {
   transform: scale(1.05);
 }
 
-.btn-secondary {
-  background-color: #4caf50;
-}
-
-.btn-secondary:hover {
-  background-color: #388e3c;
-  transform: scale(1.05);
-}
-
-.btn-report {
-  background-color: #4caf50;
+.close-btn {
+  display: inline-block;
+  background-color: #d00000;
   color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
-.btn-report:hover {
-  background-color: #388e3c;
+.close-btn:hover {
+  background-color: #a00000;
   transform: scale(1.05);
+}
+
+#struk {
+  background-color: #b5f3b7;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 100, 0, 0.1);
+  font-family: "Courier New", Courier, monospace;
+  white-space: pre-wrap;
+  animation: fadeIn 1s ease-in-out;
+  overflow-x: auto;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #struk,
+  #struk * {
+    visibility: visible;
+  }
+
+  #struk {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    background-color: #fff !important;
+    box-shadow: none;
+    border-radius: 0;
+    color: #000;
+    font-size: 12px;
+    page-break-before: always;
+  }
+
+  @media (max-width: 480px) {
+    #struk {
+      font-size: 10px;
+      padding: 5px;
+    }
+  }
 }
 
 table {
@@ -155,17 +200,6 @@ table tr:hover {
   cursor: pointer;
 }
 
-#struk {
-  background-color: #b5f3b7;
-  padding: 20px;
-  margin-top: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 100, 0, 0.1);
-  font-family: "Courier New", Courier, monospace;
-  white-space: pre-wrap;
-  animation: fadeIn 1s ease-in-out;
-}
-
 #laporanModal {
   display: none;
   position: fixed;
@@ -184,6 +218,8 @@ table tr:hover {
   border-radius: 8px;
   width: 90%;
   max-width: 600px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .laporan-header {
