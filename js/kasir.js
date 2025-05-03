@@ -1,16 +1,14 @@
 let daftarBelanja = [];
 let totalTransaksi = 0;
 
-// Tampilkan input harga manual jika Bakso Optional dipilih
 document.getElementById("menu-bakso").addEventListener("change", function () {
   const selected = this.value;
   document.getElementById("input-harga-optional").style.display =
     selected === "Bakso Optional" ? "block" : "none";
   document.getElementById("jumlah-bakso-container").style.display = 
-    selected ? "block" : "none";  // Menampilkan input jumlah untuk Bakso
+    selected ? "block" : "none";  
 });
 
-// Fungsi tambah produk
 function tambahProduk() {
   const menuBakso = document.getElementById("menu-bakso");
   const jumlahBakso = parseInt(document.getElementById("jumlah-bakso").value);
@@ -43,17 +41,14 @@ function tambahProduk() {
     return;
   }
 
-  // Tambahkan produk Bakso jika ada
   if (baksoSelected && jumlahBakso > 0) {
     daftarBelanja.push({ produk: baksoSelected, harga: hargaBakso, jumlah: jumlahBakso });
   }
 
-  // Tambahkan produk tambahan jika ada
   if (tambahanSelected && jumlahTambahan > 0) {
     daftarBelanja.push({ produk: tambahanSelected, harga: hargaTambahan, jumlah: jumlahTambahan });
   }
 
-  // Tambahkan produk minuman jika ada
   if (minumanSelected && jumlahMinuman > 0) {
     daftarBelanja.push({ produk: minumanSelected, harga: hargaMinuman, jumlah: jumlahMinuman });
   }
@@ -62,7 +57,6 @@ function tambahProduk() {
   resetForm();
 }
 
-// Fungsi untuk merender daftar produk
 function renderTabel() {
   const tbody = document.querySelector("#daftarProduk tbody");
   tbody.innerHTML = "";
@@ -195,14 +189,11 @@ function validasiJumlahProduk() {
   return true;
 }
 
-
 document.getElementById("tambah-produk").addEventListener("click", function () {
   if (validasiJumlahProduk()) {
     tambahProduk();
   }
 });
-
-
 function cetakStruk() {
   const strukContainer = document.getElementById("struk");
   if (!strukContainer || daftarBelanja.length === 0) {
@@ -211,8 +202,8 @@ function cetakStruk() {
   }
 
   let strukContent = "============================\n";
-  strukContent += "     Bakso Pak Yanto     \n";
-  strukContent +="Podosugih Pekalongan Barat\n";
+  strukContent += "        Bakso Pak Yanto        \n";
+  strukContent += "Podosugih Pekalongan Barat\n";
   strukContent += "============================\n";
   strukContent += `Kasir: Galang\n`;
   strukContent += `Tanggal: ${new Date().toLocaleString()}\n\n`;
@@ -231,18 +222,17 @@ function cetakStruk() {
 
   strukContainer.innerText = strukContent;
 
-  // Simpan ke localStorage
+  // Menyimpan transaksi ke localStorage
   const transaksi = JSON.parse(localStorage.getItem("transaksi")) || [];
   const newTransaksi = {
-    tanggal: new Date().toISOString(), // disimpan lengkap
-    produk: daftarBelanja.map(item => ({ produk: item.produk, jumlah: item.jumlah })), // disimpan detail
+    tanggal: new Date().toISOString(),
+    produk: daftarBelanja.map(item => ({ produk: item.produk, jumlah: item.jumlah })),
     total: totalTransaksi,
     metode: document.getElementById("bayar").value >= totalTransaksi ? 'Tunai' : 'Online'
   };
   transaksi.push(newTransaksi);
   localStorage.setItem("transaksi", JSON.stringify(transaksi));
 }
-
 
 function printStruk() {
   const struk = document.getElementById("struk");
@@ -300,7 +290,6 @@ function printStruk() {
   }
 }
 
-
 function resetSemua() {
   daftarBelanja = [];
   totalTransaksi = 0;
@@ -321,6 +310,21 @@ function closeLaporanModal() {
   document.getElementById("laporanModal").style.display = "none";
 }
 
+function formatTanggalIndonesia(tanggalString) {
+  const date = new Date(tanggalString);
+  const options = {
+    day: '2-digit',
+    month: 'long', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Jakarta'
+  };
+  return new Intl.DateTimeFormat('id-ID', options).format(date) + ' WIB';
+}
+
+
 function tampilkanLaporan(tipe) {
   const laporanHarian = document.getElementById("laporanHarian");
   const laporanBulanan = document.getElementById("laporanBulanan");
@@ -332,19 +336,24 @@ function tampilkanLaporan(tipe) {
     laporanHarian.style.display = "block";
     const transaksiHarian = getTransaksiHarian();
     const tbodyHarian = document.getElementById("harianBody");
-    
-    tbodyHarian.innerHTML = ""; 
-
-    transaksiHarian.forEach((transaksi) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${transaksi.tanggal}</td>
-        <td>${transaksi.produk}</td>
-        <td>Rp${transaksi.total.toLocaleString()}</td>
-        <td>${transaksi.metode}</td>
-      `;
-      tbodyHarian.appendChild(row);
-    });
+  
+    tbodyHarian.innerHTML = "";
+  
+    if (transaksiHarian.length > 0) {
+      transaksiHarian.forEach((transaksi) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${formatTanggalIndonesia(transaksi.tanggal)}</td>
+          <td>${transaksi.produk.map(p => `${p.produk} x${p.jumlah}`).join(", ")}</td>
+          <td>Rp${transaksi.total.toLocaleString("id-ID")}</td>
+          <td>${transaksi.metode}</td>
+        `;
+        tbodyHarian.appendChild(row);
+      });
+      
+    } else {
+      tbodyHarian.innerHTML = "<tr><td colspan='4'>Tidak ada transaksi hari ini.</td></tr>";
+    }
   } else if (tipe === "bulanan") {
     laporanBulanan.style.display = "block";
     const laporanBulananData = getLaporanBulanan(); 
@@ -364,13 +373,18 @@ function tampilkanLaporan(tipe) {
 
 function getTransaksiHarian() {
   const transaksi = JSON.parse(localStorage.getItem("transaksi")) || [];
-  const hariIni = new Date().toISOString().split("T")[0]; 
-  return transaksi.filter((transaksi) => transaksi.tanggal === hariIni);
+  const hariIni = new Date().toISOString().slice(0, 10); 
+
+  const transaksiHarian = transaksi.filter((transaksi) => {
+    const transaksiTanggal = transaksi.tanggal.split('T')[0]; 
+    return transaksiTanggal === hariIni;
+  });
+  
+  return transaksiHarian;
 }
 
 function getLaporanBulanan() {
   const transaksi = JSON.parse(localStorage.getItem("transaksi")) || [];
-  console.log("Transaksi yang ada di localStorage:", transaksi);
   const bulanIni = new Date().toISOString().slice(0, 7); 
   const transaksiBulanan = transaksi.filter((transaksi) => transaksi.tanggal.startsWith(bulanIni));
   
@@ -399,8 +413,6 @@ function hapusLaporan() {
   alert("Semua laporan sudah terhapus.");
 }
 
-
-
 function cariLaporanTanggal() {
   const tanggalCari = document.getElementById("tanggalCari").value;
   const tbodyHarian = document.getElementById("harianBody");
@@ -409,20 +421,19 @@ function cariLaporanTanggal() {
     alert("Silakan pilih tanggal terlebih dahulu!");
     return;
   }
-
   const transaksi = JSON.parse(localStorage.getItem("transaksi")) || [];
-  const hasil = transaksi.filter((transaksi) => transaksi.tanggal === tanggalCari);
-
+  const formattedTanggalCari = new Date(tanggalCari).toISOString().split('T')[0];
+  const hasil = transaksi.filter((t) => t.tanggal.split('T')[0] === formattedTanggalCari);
   tbodyHarian.innerHTML = "";
-
   if (hasil.length === 0) {
     tbodyHarian.innerHTML = `<tr><td colspan="4">Tidak ada transaksi pada tanggal tersebut.</td></tr>`;
   } else {
     hasil.forEach((transaksi) => {
+      const produkList = transaksi.produk.map(item => `${item.produk} x${item.jumlah}`).join(", ");
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${transaksi.tanggal}</td>
-        <td>${transaksi.produk}</td>
+        <td>${new Date(transaksi.tanggal).toLocaleDateString()}</td>
+        <td>${produkList}</td>
         <td>Rp${transaksi.total.toLocaleString()}</td>
         <td>${transaksi.metode}</td>
       `;

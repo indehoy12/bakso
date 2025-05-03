@@ -327,22 +327,24 @@ table tr:hover {
     transform: translateY(0);
   }
 }
-
 @media (max-width: 768px) {
-  .container {
-    padding: 15px;
-  }
-  #laporanHarian table {
+  .laporan-table {
     width: 100%;
     font-size: 14px;
     overflow-x: auto;
     display: block;
   }
 
-  #laporanHarian td,
-  #laporanHarian th {
+  .laporan-table th,
+  .laporan-table td {
     padding: 8px;
     word-wrap: break-word;
+    white-space: nowrap;
+  }
+
+  .close-btn {
+    font-size: 14px;
+    margin-right: 15px;
   }
 
   h1 {
