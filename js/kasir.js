@@ -213,11 +213,11 @@ function cetakStruk() {
   });
 
   strukContent += "\n---------------------------\n";
-  strukContent += `Total     : Rp${totalTransaksi.toLocaleString()}\n`;
-  strukContent += `Bayar     : Rp${document.getElementById("bayar").value}\n`;
-  strukContent += `Kembalian : Rp${document.getElementById("kembalian").innerText}\n`;
+  strukContent += `Total     : Rp ${totalTransaksi.toLocaleString()}\n`;
+  strukContent += `Bayar     : Rp ${document.getElementById("bayar").value}\n`;
+  strukContent += `Kembalian : Rp ${document.getElementById("kembalian").innerText}\n`;
   strukContent += "---------------------------\n";
-  strukContent += "     Terima Kasih 🙏     \n";
+  strukContent += "     Terima Kasih 🙏🙏🙏   \n";
   strukContent += "============================\n";
 
   strukContainer.innerText = strukContent;
@@ -228,7 +228,7 @@ function cetakStruk() {
     tanggal: new Date().toISOString(),
     produk: daftarBelanja.map(item => ({ produk: item.produk, jumlah: item.jumlah })),
     total: totalTransaksi,
-    metode: document.getElementById("bayar").value >= totalTransaksi ? 'Tunai' : 'Online'
+    metode: document.getElementById("bayar").value >= totalTransaksi ? 'Tunai' : 'QRIS'
   };
   transaksi.push(newTransaksi);
   localStorage.setItem("transaksi", JSON.stringify(transaksi));
